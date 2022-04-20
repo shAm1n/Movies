@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link type="text/css" rel="stylesheet" href="css/bootstrap.min.css" th:href="@{css/bootstrap.min.css}" />
+<script src="https://unpkg.com/@popperjs/core@2"></script>
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+ <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<title>Movies</title>
+</head>
+<body>
+<div style="background-color: #FBF8F1;">
+<nav class="navbar navbar-expand-lg navbar-light" style="background-color: #678983;">
+	<a class="navbar-brand" href="/movies"><span class="material-icons" style="transform: scale(1.5);">theaters</span> My Movies</a>
+	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    	<span class="navbar-toggler-icon"></span>
+  	</button>
+  	
+  	<div class="collapse navbar-collapse" id="navbarNav">
+  	<ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+      <li class="nav-item">
+        <a class="nav-link" href="/add" style="color: #EFEFEF">Add a new movie</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/actors" style="color: #EFEFEF">Actors</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/categories" style="color: #EFEFEF">Categories</a>
+      </li>
+    </ul>
+    <form class="form-inline my-2 my-lg-0" th:object="${movie}" th:action="@{/search}" action="#" method="get">
+      <input class="form-control mr-sm-2" type="text" placeholder="Search" id="keyword" name="keyword" th:value="${keyword}">
+      <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Search</button>
+    </form>
+  </div>
+</nav>
+	<div class="dropdown">
+	  <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" style="margin:10px;">
+	    Filter options
+	  <b class="caret"></b></button>
+	  <ul class="dropdown-menu" aria-labelledby="dropdown">
+	    <li><a class="dropdown-item" type="button" th:href="@{/abc}">Alphabetical</a></li>
+	    <li><hr class="dropdown-divider"></li>
+	    <li><a class="dropdown-item" type="button" th:href="@{/yearAsc}">By year asc</a></li>
+	    <li><a class="dropdown-item" type="button" th:href="@{/yearDesc}">By year desc</a></li>
+	    <li><hr class="dropdown-divider"></li>
+	    <li><a class="dropdown-item" type="button" th:href="@{/rating}">By rating</a></li>
+	    <li><hr class="dropdown-divider"></li>
+	    <li><a class="dropdown-item" type="button" th:href="@{/notseen}">Not seen yet</a></li>
+	  </ul>
+	</div>
+	<div class="card-deck" style="margin:10px;">
+			<div class="card" th:each="movie:${movies}" style="background-color:#F0E9D2; min-width: 18rem; max-width: 22rem; margin-bottom: 20px;">
+			<!-- <img class="card-img-top" src="" alt="Card image cap"> -->
+				<div class="card-body">
+					<h4 class="card-title" th:text="${movie.title}" style="color:#678983">title</h4>
+					<p class="card-text">
+						<small class="text-muted" th:text="${movie.category.name}+' -'"></small>
+						<small class="text-muted" th:text="${movie.year}+' -'"></small>
+						<small class="text-muted" th:text="${movie.length}+' min'"></small>
+					</p>
+					<p class="card-text" th:text="${movie.actor.firstname+' '+movie.actor.lastname}"></p>
+					<p class="card-text"><span class="material-icons" style="transform: scale(0.7);">grade</span><small th:text="'Rating: '+${movie.rating}+'/10'"></small></p>
+					<!-- <p class="card-text"><span class="material-icons" style="transform: scale(0.7);">grade</span><small th:text="'IMDB-rating: '+${movie.imdb_rating}+'/10'"></small></p>
+					<p class="card-text"><span class="material-icons" style="transform: scale(0.7);">grade</span><small th:text="'Rotten tomatoes-rating: '+${movie.rottentom_rating}+'/10'"></small></p> -->
+					<p class="card-text" th:text="${movie.description}"></p>
+					
+				</div>
+				<div class="card-footer" style="text-align:center;background-color:#E6DDC4;">
+					<small class="text-muted" th:text="'-- '+${movie.tagline}+' --'"></small>
+				</div>
+				<div class="card-footer">
+      				<a th:href="@{/delete/{id}(id=${movie.id})}" class="btn btn-outline-warning">Delete</a>
+      				<a th:href="@{/edit/{id}(id=${movie.id})}" class="btn btn-outline-success">Edit</a>
+    			</div>
+			</div>
+		</div>
+	<div class="alert alert-dark" role="alert" style="margin:10px;">Try our search! You can find movies by title, actor, category or by decade 2020s, 2010s, 2000s, 1990s...</div>
+</div>
+<script type="text/javascript">
+$(function(){
+    $(".dropdown").hover(            
+            function() {
+                $('.dropdown-menu', this).stop( true, true ).fadeIn("fast");
+                $(this).toggleClass('open');
+                $('b', this).toggleClass("caret caret-up");                
+            },
+            function() {
+                $('.dropdown-menu', this).stop( true, true ).fadeOut("fast");
+                $(this).toggleClass('open');
+                $('b', this).toggleClass("caret caret-up");                
+            });
+    });
+</script>
+</body>
+</html>
