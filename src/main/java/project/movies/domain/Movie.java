@@ -5,6 +5,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
@@ -12,14 +17,20 @@ public class Movie {
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Long id;
+	@NotBlank(message = "please give a title")
 	private String title;
+	@Min(value=1900, message="there were no movies yet!")  
+    @Max(value=2022, message="the year can not be in the future")  
 	private int year;
+    @Size(min = 5, max = 5, message="must be five characters")
 	private String decade;	//1980s, 2010s...
 	private int length;
 	private int rating;
 	/*private double imdb_rating;
 	private double rottentom_rating;*/
+	@Size(min=5, max=255)
 	private String description;
+	@Size(min=5, max=255)
 	private String tagline;
 	private boolean seen;
 	

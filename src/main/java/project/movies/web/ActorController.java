@@ -1,8 +1,11 @@
 package project.movies.web;
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,9 +38,13 @@ public class ActorController {
 	}
 	
 	@PostMapping("/saveactor")
-	public String saveActor(Actor actor) {
-		actors.save(actor);
-		return "redirect:actors";
+	public String saveActor(@Valid Actor actor, BindingResult bindingResult) {
+		if(bindingResult.hasErrors()) {
+			return "newactor";
+		} else {
+			actors.save(actor);
+			return "redirect:actors";
+		}
 	}
 	@GetMapping("/deleteactor/{id}")
 	@PreAuthorize("hasAuthority('ADMIN')")

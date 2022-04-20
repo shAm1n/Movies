@@ -6,6 +6,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.NotBlank;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
@@ -13,7 +14,9 @@ public class Actor {
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Long actid;
+	@NotBlank(message = "please give a first name")
 	private String firstname;
+	@NotBlank(message = "please give a last name")
 	private String lastname;
 	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "actor")
@@ -56,7 +59,7 @@ public class Actor {
 		return lastname;
 	}
 
-	public void setLast_name(String lastname) {
+	public void setLastname(String lastname) {
 		this.lastname = lastname;
 	}
 

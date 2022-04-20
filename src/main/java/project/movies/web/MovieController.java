@@ -2,12 +2,15 @@ package project.movies.web;
 import java.util.List;
 import java.util.Optional;
 
+import javax.validation.Valid;
+
 //import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -101,9 +104,15 @@ public class MovieController {
 	}
 	
 	@PostMapping("/save")
-	public String saveMovie(Movie movie) {
-		movies.save(movie);
-		return "redirect:movielist";
+	public String saveMovie(@Valid Movie movie, BindingResult bindingResult, Model model) {
+		if(bindingResult.hasErrors()) {
+			model.addAttribute("categories", cats.findAll());
+			model.addAttribute("actors", actors.findAll());
+			return "newmovie";
+		} else {
+			movies.save(movie);
+			return "redirect:movielist";
+		}
 	}
 	
 	@GetMapping("/edit/{id}")
