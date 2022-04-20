@@ -9,7 +9,7 @@
 <body>
 <div style="background-color: #FBF8F1;">
 <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #678983;">
-	<a class="navbar-brand" href="/movies"><span class="material-icons" style="transform: scale(1.5);">theaters</span> My Movies</a>
+	<a class="navbar-brand" href="/movielist"><span class="material-icons" style="transform: scale(1.5);">theaters</span> My Movies</a>
 	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
     	<span class="navbar-toggler-icon"></span>
   	</button>
@@ -38,7 +38,7 @@
 		<div class="col">
 			<h4>Actors</h4>
 			<ul th:each="actor : ${actors}">
-				<!-- <a href="@{/movies/{id}(id=${actor.actid})}"> --><li th:text="${actor.firstname+' '+actor.lastname}">name</li><!-- </a> -->
+				<li><a th:href="@{/editactor/{id}(id=${actor.actid})}"><span th:text="${actor.firstname+' '+actor.lastname}">name</span></a></li>
 			</ul>
 			
 		<a href="/newactor" class="btn btn-outline-success">Add a new actor</a>

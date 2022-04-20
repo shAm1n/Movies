@@ -1,9 +1,11 @@
 package project.movies.web;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import project.movies.domain.Actor;
 import project.movies.domain.ActorRepository;
@@ -24,10 +26,24 @@ public class ActorController {
 		model.addAttribute("actor", new Actor());
 		return "newactor";
 	}
+	@GetMapping("/editactor/{id}")
+	@PreAuthorize("hasAuthority('ADMIN')")
+	public String editActor(@PathVariable("id") Long actid, Model model) {
+		Actor actor = actors.findById(actid).get();
+		model.addAttribute("actor", actor);
+		return "editactor";
+	}
+	
 	@PostMapping("/saveactor")
 	public String saveActor(Actor actor) {
 		actors.save(actor);
 		return "redirect:actors";
+	}
+	@GetMapping("/deleteactor/{id}")
+	@PreAuthorize("hasAuthority('ADMIN')")
+	public String deleteActor(@PathVariable("id") Long actid, Model model) {
+		actors.deleteById(actid);
+		return "redirect:../actors";
 	}
 	/*//REST find all
 	@GetMapping("/categories")

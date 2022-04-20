@@ -1,5 +1,7 @@
 package project.movies.web;
 import java.util.List;
+import java.util.Optional;
+
 //import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
@@ -10,7 +12,9 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 //import org.springframework.web.bind.annotation.RequestBody;
 //import org.springframework.web.bind.annotation.ResponseBody;
@@ -31,7 +35,7 @@ public class MovieController {
 	@Autowired
 	private MovieService service;
 	
-	@GetMapping("/movies")
+	@GetMapping("/movielist")
 	public String Movielist(Model model ) {
 		model.addAttribute("movies", movies.findAll());
 		return "movies";
@@ -84,7 +88,7 @@ public class MovieController {
 	@PreAuthorize("hasAuthority('ADMIN')")
 	public String deleteMovie(@PathVariable("id") Long id, Model model) {
 		movies.deleteById(id);
-		return "redirect:../movies";
+		return "redirect:../movielist";
 	}
 	
 	@GetMapping("/add")
@@ -99,7 +103,7 @@ public class MovieController {
 	@PostMapping("/save")
 	public String saveMovie(Movie movie) {
 		movies.save(movie);
-		return "redirect:movies";
+		return "redirect:movielist";
 	}
 	
 	@GetMapping("/edit/{id}")
@@ -114,7 +118,7 @@ public class MovieController {
 		return "editmovie";
 	}
 	
-	/*//REST find all
+	//REST find all
 	@GetMapping("/movies")
 	public @ResponseBody List<Movie> movieListRest() {
 		return (List<Movie>) movies.findAll();
@@ -122,13 +126,15 @@ public class MovieController {
 	
 	//REST find by id
 	@GetMapping("/movies/{id}")
-	public @ResponseBody Optional<Book> findMovieRest(@PathVariable("id") Long id) {	
+	public @ResponseBody Optional<Movie> findMovieRest(@PathVariable("id") Long id) {	
     	return movies.findById(id);
     }
 	
-	//REST new book
+	//REST new movie
 	@PostMapping("/movies")
 	public @ResponseBody Movie saveMovieRest(@RequestBody Movie movie) {	
     	return movies.save(movie);
-    }*/
+    }
+	
+	
 }

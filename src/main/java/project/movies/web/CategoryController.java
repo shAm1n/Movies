@@ -1,15 +1,17 @@
 package project.movies.web;
-//import java.util.List;
-//import java.util.Optional;
+/*import java.util.List;
+import java.util.Optional;*/
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-//import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-//import org.springframework.web.bind.annotation.RequestBody;
-//import org.springframework.web.bind.annotation.ResponseBody;
+/*import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;*/
 import project.movies.domain.Category;
 import project.movies.domain.CategoryRepository;
 
@@ -34,21 +36,34 @@ public class CategoryController {
 		cats.save(category);
 		return "redirect:categories";
 	}
+	@GetMapping("/editcategory/{id}")
+	@PreAuthorize("hasAuthority('ADMIN')")
+	public String editCategory(@PathVariable("id") Long catid, Model model) {
+		Category cat = cats.findById(catid).get();
+		model.addAttribute("category", cat);
+		return "editcategory";
+	}
+	@GetMapping("/deletecategory/{id}")
+	@PreAuthorize("hasAuthority('ADMIN')")
+	public String deleteCategory(@PathVariable("id") Long catid, Model model) {
+		cats.deleteById(catid);
+		return "redirect:../categories";
+	}
 	/*//REST find all
 	@GetMapping("/categories")
     public @ResponseBody List<Category> getCategoriesRest() {	
-        return (List<Category>) categories.findAll();
+        return (List<Category>) cats.findAll();
     }    
 
 	//REST get by id
-    @GetMapping(value="/categories/{id}")
+    @GetMapping("/categories/{id}")
     public @ResponseBody Optional<Category> findCategoryRest(@PathVariable("id") Long catId) {	
-    	return categories.findById(catId);
+    	return cats.findById(catId);
     } 
     
     //REST save new category
     @PostMapping("/categories")
     public @ResponseBody Category saveCategoryRest(@RequestBody Category cat) {	
-    	return categories.save(cat);
+    	return cats.save(cat);
     }*/
 }
